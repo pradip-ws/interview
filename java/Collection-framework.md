@@ -147,3 +147,53 @@ This is how HashMap efficiently determines which bucket should store the key-val
 HashSet internally uses a HashMap. When I add an element to a HashSet, the element becomes the key in the internal map, and a shared dummy object is used as the value.
 
 HashSet uses hashCode() and equals() to identify duplicates. If an equal element already exists, it doesn't add another element.
+
+## What is the difference between List.of(), Arrays.asList(), and ArrayList?
+
+List.of(), Arrays.asList(), and ArrayList differ mainly in mutability and size flexibility. List.of() was introduced in Java 9 and returns an unmodifiable list that does not permit null elements. Arrays.asList() returns a fixed-size list backed by the original array, so I can replace elements using set(), but I cannot add or remove them. ArrayList is a resizable implementation of the List interface that supports adding, removing, and replacing elements. In practice, I use List.of() for unmodifiable lists, Arrays.asList() for fixed-size array-backed lists, and ArrayList for general-purpose dynamic collections
+
+## Code examples
+A. List.of() — unmodifiable list
+List<String> names = List.of("Pradip", "Rahul", "Amit");
+
+System.out.println(names.get(0)); // Pradip
+
+names.add("Raj");    // UnsupportedOperationException
+names.set(0, "Jay"); // UnsupportedOperationException
+
+Key points:
+- Available from Java 9.
+- Does not allow null elements.
+- You cannot add, remove, or replace elements.
+- Suitable for lists that should not be structurally or element-wise modified through the list API.
+
+B. Arrays.asList() — fixed-size list
+
+String[] array = {"Pradip", "Rahul", "Amit"};
+
+List<String> names = Arrays.asList(array);
+
+names.set(0, "Jay");  // Allowed
+names.add("Raj");     // UnsupportedOperationException
+names.remove(1);     // UnsupportedOperationException
+
+System.out.println(array[0]); // Jay
+
+Key points:
+- The returned list is backed by the original array.
+- Replacing an element through set() updates the array, and changing the array updates the list.
+- The list's size cannot change.
+- It allows null elements.
+
+C. ArrayList — resizable list
+
+List<String> names = new ArrayList<>();
+
+names.add("Pradip");
+names.add("Rahul");
+names.add("Amit");
+
+names.add("Raj");       // Allowed
+names.remove("Rahul");  // Allowed
+names.set(0, "Jay");    // Allowed
+
